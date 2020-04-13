@@ -256,6 +256,10 @@ def fft_senial_muestreada(x):
     for k in range(N):
         for j in range(N):
             X[k] = X[k]+x[j]*(W**(k*j))
+            
+        # Debemos filtrar un poco y poner los valores muy bajos a 0, ya que de lo contrario tiene mucha sensibilidad y la grafica del angulo de la parte imaginaria da saltos
+        if X[k] < 10 ** -5:
+            X[k] = 0.0
 
 	# Eliminamos los parentesis del array para que matplotlib pueda leerlo
     X = np.array(X).ravel()
@@ -268,17 +272,10 @@ la salida es la siguiente:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.4]{img/mi_fft.png}
+	\includegraphics[scale=0.55]{img/mi_fft.png}
 \end{figure}
 
-Como se puede observar, cuando se muestra completa, la señal se aprecia igual que en el caso anterior con la transformada propia de python. Pero ahora la gráfica que muestra la parte imaginaria, al haber muchos puntos (el ejemplo es el mismo), se aprecia mucha variabilidad entre las muestras. Si se toman menos muestras (como sería lo normal en una señal muestreada), el resultado sería algo así (se han tomado 80):
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{img/mi_fft_smol.png}
-\end{figure}
-
-Por tanto, podríamos decir que la que hemos implementado es más precisa que la que viene implementada en python, ya que esta última no parece estar detectando bien la variabilidad entre unos valores y otros. Para el mismo ejemplo, la transformada de python coge los valores del ángulo de la parte imaginaria sin variaciones, mientras que la que hemos implementado parece que está teniendo en cuenta dichos saltos entre un valor y otro.
+Como se puede observar, la señal que hemos conseguido es igual a la que implementa python, así que hemos creado una transformada de Fourier para señales muestreadas.
 
 \newpage
 
