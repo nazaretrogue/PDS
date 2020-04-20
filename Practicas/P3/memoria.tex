@@ -1,0 +1,258 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}	%Idioma
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx} 	%Añadir imágenes
+\usepackage{geometry}	%Ajustar márgenes
+\usepackage[export]{adjustbox}[2011/08/13]
+\usepackage{float}
+\restylefloat{table}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titling}
+\graphicspath{{/home/nazaret/Escritorio/LaTEX}}
+%\usepackage{minted}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage[shortlabels]{enumitem}
+\usepackage{array}
+\selectlanguage{spanish}
+
+%Opciones de encabezado y pie de página:
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Nazaret Román Guerrero}
+\rhead{Procesamiento Digital de Señales}
+\lfoot{Grado en Ingeniería Informática}
+\cfoot{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%Opciones de fuente:
+\usepackage[utf8]{inputenc}
+\usepackage[default]{sourcesanspro}
+\usepackage{sourcecodepro}
+\usepackage[T1]{fontenc}
+
+\setlength{\parindent}{15pt}
+\setlength{\headheight}{15pt}
+\setlength{\voffset}{10mm}
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Matlab,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\begin{document}
+\begin{titlepage}
+
+\begin{minipage}{\textwidth}
+
+\centering
+\includegraphics[width=0.55\textwidth]{img/logo.png}\\
+
+\textsc{\Large asignatura\\[0.2cm]}
+\textsc{GRADO EN INGENIERÍA INFORMÁTICA}\\[1cm]
+
+{\Huge\bfseries Práctica 3\\}
+\noindent\rule[-1ex]{\textwidth}{3pt}\\[3.5ex]
+{\large\bfseries Sistemas discretos. Respuesta temporal}
+\end{minipage}
+
+\vspace{1.5cm}
+\begin{minipage}{\textwidth}
+\centering
+
+\textbf{Autora}\\ {Nazaret Román Guerrero}\\[2.5ex]
+\includegraphics[width=0.3\textwidth]{img/etsiit.jpeg}\\[0.1cm]
+\vspace{1cm}
+\textsc{Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación}\\
+\vspace{1cm}
+\textsc{Curso 2018-2019}
+\end{minipage}
+\end{titlepage}
+
+\pagenumbering{gobble}
+\pagenumbering{arabic}
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+
+\section{Filtros IIR}
+
+A pesar de no haber sido capaz de instalar Matlab y no haberlo podido usarlo para la práctica anterior (ya que dependía de un fichero que no podía subir), encontré un intérprete online que sí he podido utilizar para esta práctica.\\
+
+El intérprete es \color{blue} \url{https://octave-online.net/}\color{black}.
+
+\subsection{Representación gráfica del filtro IIR}
+
+Utilizando el código proporcionado solo debemos ejecutarlo. El código está incluido bajo el nombre de \texttt{filtro\_iir.m}.
+
+\begin{lstlisting}[frame=single]
+	% Se definen los arrays con los pulsos
+   	x=[1 zeros(1,29)];
+   	
+   	% Se definen los coeficientes de las ecuaciones en diferencias
+	a=[1 0 0.9];
+	b=[0.3 0.6 0.3];
+	
+	% Muestra actual
+	xn=[0 0 0];
+	yn=[0 0 0];
+	
+	for n=1:length(x)
+		% Los valores cambian en cada vuelta
+		xn(3)=xn(2); xn(2)=xn(1); xn(1)=x(n);
+		
+		yn(3)=yn(2); yn(2)=yn(1); yn(1)=0.;
+		
+		% Se calcula el resultado de operacion de filtrado
+		y(n) = -a*yn' +b*xn';
+		
+		% Se actualizan los valores
+		yn(1)=y(n);
+	end
+	
+	% Pintamos la grafica discreta y continua
+	stem(y);
+\end{lstlisting}
+
+Cuando se ejecuta el código se genera una gráfica que muestra los valores discretos donde toma valor el filtro, como se puede observar en la siguiente imagen:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/stem1.png}
+\end{figure}
+
+Como se puede observar, el filtro hace que la señal tenga un pico al principio y vaya decreciendo (la parte positiva) y creciendo (la parte negativa) para estabilizarse en torno al valor 0.
+
+\subsection{Función \texttt{filter} de Matlab}
+
+Si en lugar de utilizar una función programada a mano utilizamos la función \texttt{filter} que ya viene definida en Matlab, quedaría el siguiente código (\texttt{filtro\_iir\_filter.m}):
+
+\begin{lstlisting}[frame=single]
+	% Se definen los arrays con los pulsos
+   	x=[1 zeros(1,29)];
+   	
+   	% Se definen los coeficientes de las ecuaciones en diferencias
+	a=[1 0 0.9];
+	b=[0.3 0.6 0.3];
+	
+	% Muestra actual
+	xn=[0 0 0];
+	yn=[0 0 0];
+	
+	filtro = filter(b, a, x)
+	
+	% Pintamos la grafica discreta y continua
+	stem(filtro);
+\end{lstlisting}
+
+La salida es exactamente la misma que en el caso anterior, como se puede observar:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/stem-filter.png}
+\end{figure}
+
+Eso significa que el filtro implementado en el apartado anterior es correcto, ya que funciona igual que el filtro propio del lenguaje.
+
+\subsection{Respuesta con el escalón unitario}
+
+Ahora vamos a cambiarlo para utilizar el escalón unitario en lugar del impulso unitario como ocurría en el caso anterior. El hecho de que sea escalón significa que todos los valores mayores que 0 toman el valor 1, es decir:
+
+\[\delta(n)=\begin{cases} 
+      1, & n\geq 0\\
+      0, & n< 0
+   \end{cases}
+\]
+
+ mientras que en el caso de el impulso unitario solo toma el valor 1 cuando $n=0$.\\
+ 
+Para tener el escalón unidad solo debemos cambiar la siguiente línea del código anterior (incluido como \texttt{filtro\_iir\_escalon.m}):
+
+\begin{lstlisting}[frame=single]
+	% Se definen los arrays con los pulsos. El escalon unitario
+   	x=[ones(1,30)];
+\end{lstlisting}
+
+Como es de esperar, los valores se ven aumentados. No hay valores negativos pero a pesar de ello se puede seguir observando la tendencia a estabilizarse del filtro alrededor del 0.4:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/iir-escalon.png}
+\end{figure}
+
+\section{Filtros FIR}
+
+En este caso vamos a hacer un filtro que cuente con las 10 muestras anteriores. El código, incluido como \texttt{filtro\_fir.m}, es el siguiente:
+
+\begin{lstlisting}[frame=single]
+	% Se definen el array con los pulsos
+	x = [1 zeros(1, 29)];
+
+	% Para la media tomamos 10 muestras
+	h = ones(1, 10);
+
+	% Inicializamos la memoria con ceros
+	signal_mem = zeros(1, 10);
+
+	for n=1:length(x)
+		x_in = x(n);
+		signal_mem(1) = x_in;
+		y_out = h(1)*signal_mem(1);
+
+		% Recorremos el array de muestras anteriores
+		for m=length(h):-1:2
+			% Sumamos todos los factores anteriores
+			y_out = y_out + h(m)*signal_mem(m);
+			signal_mem(m) = signal_mem(m-1);
+		end
+
+		% Calculamos la media
+		y(n) = y_out/length(h);
+	end
+\end{lstlisting}
+
+Como se puede ver en el código, en el bucle for interno se hace la suma de las 10 muestras anteriores (inicialmente estas muestras valen 0 y todas tienen el mismo peso, 1, reflejado en el array \texttt{h}). Una vez que se tiene la suma de los 10 valores completa, se hace la media dividiendo por el número de valores.\\
+
+La salida proporcionada es la siguiente:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/fir-grafica.png}
+\end{figure}
+
+
+
+\end{document}
