@@ -1,24 +1,26 @@
-% Se definen el array con los pulsos
-x = [1 zeros(1, 29)];
+% Se define el array con los pulsos
+x=[1 zeros(1,29)];
 
-% Para la media tomamos 10 muestras
-h = ones(1, 10);
+% Coeficientes
+b = 0.1 * ones(1,10);
+a = 1;
 
-% Inicializamos la memoria con ceros
-signal_mem = zeros(1, 10);
+% Muestra actual
+xn = zeros(1,10);
+yn = zeros(1,10);
 
+% Se calculan los pulsos
 for n=1:length(x)
-  x_in = x(n);
-  signal_mem(1) = x_in;
-  y_out = h(1)*signal_mem(1);
+  for m=length(b):-1:2
+    xn(m) = xn(m-1);
+    yn(m) = yn(m-1);
 
-  % Recorremos el array de muestras anteriores
-  for m=length(h):-1:2
-    % Sumamos todos los factores anteriores
-    y_out = y_out + h(m)*signal_mem(m);
-    signal_mem(m) = signal_mem(m-1);
-  end
+  xn(1)=x(n);
+  yn(1)=0.;
 
-  % Calculamos la media
-  y(n) = y_out/length(h);
+  % Se hace la media de los 10 valores al multiplicar por b
+  y(n) = b*xn';
+
 end
+
+stem(y);

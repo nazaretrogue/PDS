@@ -1,4 +1,4 @@
-% Se definen los arrays con los pulsos
+% Se define el array con los pulsos
 x=[1 zeros(1,29)];
 
  % Se definen los coeficientes de las ecuaciones en diferencias

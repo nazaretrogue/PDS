@@ -80,7 +80,7 @@
 \centering
 \includegraphics[width=0.55\textwidth]{img/logo.png}\\
 
-\textsc{\Large asignatura\\[0.2cm]}
+\textsc{\Large Procesamiento Digital de Señales\\[0.2cm]}
 \textsc{GRADO EN INGENIERÍA INFORMÁTICA}\\[1cm]
 
 {\Huge\bfseries Práctica 3\\}
@@ -119,7 +119,7 @@ El intérprete es \color{blue} \url{https://octave-online.net/}\color{black}.
 Utilizando el código proporcionado solo debemos ejecutarlo. El código está incluido bajo el nombre de \texttt{filtro\_iir.m}.
 
 \begin{lstlisting}[frame=single]
-	% Se definen los arrays con los pulsos
+	% Se define el array con los pulsos
    	x=[1 zeros(1,29)];
    	
    	% Se definen los coeficientes de las ecuaciones en diferencias
@@ -147,7 +147,7 @@ Utilizando el código proporcionado solo debemos ejecutarlo. El código está in
 	stem(y);
 \end{lstlisting}
 
-Cuando se ejecuta el código se genera una gráfica que muestra los valores discretos donde toma valor el filtro, como se puede observar en la siguiente imagen:
+Se crea el array con los impulsos, se definen los coeficientes de las ecuaciones en diferencias y se calcula mediante un doble bucle. Una vez hecho, se genera la gráfica que muestra los valores discretos donde toma valor el filtro, como se puede observar en la siguiente imagen:
 
 \begin{figure}[H]
 	\centering
@@ -161,16 +161,12 @@ Como se puede observar, el filtro hace que la señal tenga un pico al principio 
 Si en lugar de utilizar una función programada a mano utilizamos la función \texttt{filter} que ya viene definida en Matlab, quedaría el siguiente código (\texttt{filtro\_iir\_filter.m}):
 
 \begin{lstlisting}[frame=single]
-	% Se definen los arrays con los pulsos
+	% Se define el array con los pulsos
    	x=[1 zeros(1,29)];
    	
    	% Se definen los coeficientes de las ecuaciones en diferencias
 	a=[1 0 0.9];
 	b=[0.3 0.6 0.3];
-	
-	% Muestra actual
-	xn=[0 0 0];
-	yn=[0 0 0];
 	
 	filtro = filter(b, a, x)
 	
@@ -202,7 +198,7 @@ Ahora vamos a cambiarlo para utilizar el escalón unitario en lugar del impulso 
 Para tener el escalón unidad solo debemos cambiar la siguiente línea del código anterior (incluido como \texttt{filtro\_iir\_escalon.m}):
 
 \begin{lstlisting}[frame=single]
-	% Se definen los arrays con los pulsos. El escalon unitario
+	% Se define el array con los pulsos. El escalon unitario
    	x=[ones(1,30)];
 \end{lstlisting}
 
@@ -213,38 +209,75 @@ Como es de esperar, los valores se ven aumentados. No hay valores negativos pero
 	\includegraphics[scale=0.5]{img/iir-escalon.png}
 \end{figure}
 
-\section{Filtros FIR}
+\subsection{¿Es estable el sistema anterior?}
 
-En este caso vamos a hacer un filtro que cuente con las 10 muestras anteriores. El código, incluido como \texttt{filtro\_fir.m}, es el siguiente:
+Un sistema es estable si da lugar a una respuesta acotada, es decir, que no tiende a infinito. Es decir, se cumple que:
+
+\[
+	\sum_{n=0}^{\infty}\mid h(n) \mid < \infty
+\]
+
+Esto significa que el sistema del impulso unitario que hemos implementado sí es estable, ya que tiende a 0 como se puede ver claramente en la gráfica generada.
+
+\subsection{¿Es estable el siguente sistema?}
+
+Dada la ecuación en diferencias:
+
+\[y(n)-2.5y(n-1)+y(n-2)=4x(n)\]
+
+Vamos a ejecutar el código para extraer la gráfica. Usando el código anterior solo tenemos que cambiar dos líneas (fichero incluido como \texttt{filtro\_iir\_ap5.m}):
 
 \begin{lstlisting}[frame=single]
-	% Se definen el array con los pulsos
-	x = [1 zeros(1, 29)];
-
-	% Para la media tomamos 10 muestras
-	h = ones(1, 10);
-
-	% Inicializamos la memoria con ceros
-	signal_mem = zeros(1, 10);
-
-	for n=1:length(x)
-		x_in = x(n);
-		signal_mem(1) = x_in;
-		y_out = h(1)*signal_mem(1);
-
-		% Recorremos el array de muestras anteriores
-		for m=length(h):-1:2
-			% Sumamos todos los factores anteriores
-			y_out = y_out + h(m)*signal_mem(m);
-			signal_mem(m) = signal_mem(m-1);
-		end
-
-		% Calculamos la media
-		y(n) = y_out/length(h);
-	end
+ % Se definen los coeficientes de las ecuaciones en diferencias
+a=[1 -2.5 1];
+b=[4 0 0];
 \end{lstlisting}
 
-Como se puede ver en el código, en el bucle for interno se hace la suma de las 10 muestras anteriores (inicialmente estas muestras valen 0 y todas tienen el mismo peso, 1, reflejado en el array \texttt{h}). Una vez que se tiene la suma de los 10 valores completa, se hace la media dividiendo por el número de valores.\\
+Teniendo esto en cuenta solo necesitamos ejecutar el código para ver la salida. En este caso, se puede ver claramente que el sistema no es estable, ya que la suma no está acotada.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/iir-inestable.png}
+\end{figure}
+
+Se puede observar como la gráfica tiende a infinito y por tanto no es estable.
+	
+\newpage
+	
+\section{Filtros FIR}
+
+En este caso vamos a hacer un filtro que utilice las 10 muestras anteriores para hacer una media. El código, incluido como \texttt{filtro\_fir.m}, es el siguiente:
+
+\begin{lstlisting}[frame=single]
+	% Se define el array con los pulsos
+	x=[1 zeros(1,29)];
+
+	% Coeficientes
+	b = 0.1 * ones(1,10);
+	a = 1;
+
+	% Muestra actual
+	xn = zeros(1,10);
+	yn = zeros(1,10);
+
+	% Se calculan los pulsos
+	for n=1:length(x)
+		for m=length(b):-1:2
+			xn(m) = xn(m-1);
+			yn(m) = yn(m-1);
+		end
+
+		xn(1)=x(n);
+		yn(1)=0.;
+
+		% Se hace la media de los 10 valores al multiplicar por b
+		y(n) = b*xn';
+	end
+
+	stem(y);
+\end{lstlisting}
+
+Como se puede ver en el código, en el bucle for interno se hace la suma de las 10 muestras anteriores (inicialmente estas muestras valen 0 y todas tienen el mismo peso, 0.1, reflejado en el array \texttt{h}).\\
 
 La salida proporcionada es la siguiente:
 
@@ -253,6 +286,49 @@ La salida proporcionada es la siguiente:
 	\includegraphics[scale=0.5]{img/fir-grafica.png}
 \end{figure}
 
+\subsection{Función \texttt{filter} de Matlab}
 
+En este caso vamos a utilizar la función \texttt{filter} que hemos utilizado anteriormente, pero con un filtro FIR en respuesta al escalón unitario. El código es el siguiente (incluido con el nombre de \texttt{filtro\_fir\_escalon\_filter.m}):
+
+\begin{lstlisting}[frame=single]
+% Se define el array con los pulsos
+x=[ones(1,30)];
+
+% Coeficientes
+b = 0.1 * ones(1,10);
+a = 1;
+
+filtro = filter(b, a, x)
+
+stem(filtro)
+\end{lstlisting}
+
+Primero se crean los impulsos del escalón unitario, se define el número de muestras y el peso de cada una, se crea la memoria para acumular los valores y se aplica el filtro. Tras esto lo mostramos la gráfica.\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/fir-escalon-filter.png}
+\end{figure}
+
+Como se puede observar, el filtro tarda 9 muestras en estabilizarse; la 10ª muestra se estabiliza a 1 y a partir de ahí todas toman el mismo valor. Por tanto, el retardo es de 9 muestras.
+
+\subsection{Función \texttt{conv} de Matlab}
+
+Finalmente vamos a probar a usar la función \texttt{conv}. Solo debemos cambiar una línea del código anterior:
+
+\begin{lstlisting}[frame=single]
+filtro = conv(b, x);
+\end{lstlisting}
+
+El código está incluido bajo el nombre de \texttt{filtro\_fir\_conv.m}. Utilizando esta funcion la salida es la siguiente:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/fir-conv.png}
+\end{figure}
+
+Como podemos ver, en la convolución con 30 muestras se aplica un filtro que da lugar a una salida con 40 puntos. Esto se debe a que la convolución es una operación que multiplica (de acuerdo con la documentación oficial), por lo que los valores se ven aumentados.\\
+
+La diferencia con la función \texttt{filter} es evidente: mientras que ésta se mantiene en el valor 1 cuando llega a él en la muestra 10, la convolución forma una subida con 10 muestras (las que se indican en el vector h), y una bajada con el mismo número de muestras. El resto de muestras se mantienen constantes entre la subida y la bajada formadas. Es decir, la diferencia principal con \texttt{filter} es que \texttt{conv} utiliza 10 muestras para realidad una bajada.
 
 \end{document}
