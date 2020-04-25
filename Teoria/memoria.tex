@@ -1,0 +1,151 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}	%Idioma
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx} 	%Añadir imágenes
+\usepackage{geometry}	%Ajustar márgenes
+\usepackage[export]{adjustbox}[2011/08/13]
+\usepackage{float}
+\restylefloat{table}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titling}
+\graphicspath{{/home/nazaret/Escritorio/LaTEX}}
+%\usepackage{minted}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage[shortlabels]{enumitem}
+\usepackage{array}
+\selectlanguage{spanish}
+
+%Opciones de encabezado y pie de página:
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Nazaret Román Guerrero}
+\rhead{Procesamiento Digital de Señales}
+\lfoot{Grado en Ingeniería Informática}
+\cfoot{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%Opciones de fuente:
+\usepackage[utf8]{inputenc}
+\usepackage[default]{sourcesanspro}
+\usepackage{sourcecodepro}
+\usepackage[T1]{fontenc}
+
+\setlength{\parindent}{15pt}
+\setlength{\headheight}{15pt}
+\setlength{\voffset}{10mm}
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Matlab,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\begin{document}
+\begin{titlepage}
+
+\begin{minipage}{\textwidth}
+
+\centering
+\includegraphics[width=0.55\textwidth]{logo.png}\\
+
+\textsc{\Large Procesamiento Digital de Señales\\[0.2cm]}
+\textsc{GRADO EN INGENIERÍA INFORMÁTICA}\\[1cm]
+
+{\Huge\bfseries Relación de ejercicios\\}
+\noindent\rule[-1ex]{\textwidth}{3pt}\\[3.5ex]
+{\large\bfseries Ejercicios de teoría. Tema 1}
+\end{minipage}
+
+\vspace{1.5cm}
+\begin{minipage}{\textwidth}
+\centering
+
+\textbf{Autora}\\ {Nazaret Román Guerrero}\\[2.5ex]
+\includegraphics[width=0.3\textwidth]{etsiit.jpeg}\\[0.1cm]
+\vspace{1cm}
+\textsc{Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación}\\
+\vspace{1cm}
+\textsc{Curso 2018-2019}
+\end{minipage}
+\end{titlepage}
+
+\pagenumbering{gobble}
+\pagenumbering{arabic}
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+
+\section{Ejercicio 1}
+
+La señal en tiempo discreto
+
+\[x(n)=6.35cos(\pi n/10) \]
+
+es cuantizada con una resolución: (a) $\Delta = 0.1$ o (b) $\Delta = 0.02$. ¿Cuántos bits necesita el convertidor A/D en cada caso?\\
+
+Para calcular los bits necesarios vamos a utilizar la ecuación de la cuantización.
+
+\begin{enumerate}[a)]
+	\item $\Delta = 0.1$
+	
+	\begin{gather*}
+	Delta = \frac{2X_{max}}{2^B} \\
+	2^B = \frac{2X_{max}}{\Delta} = \frac{2*6.35}{0.1} = 127
+	\end{gather*}
+
+Ahora solo debemos calcular el logaritmo para sacar los bits que necesita el cuantizador.
+
+	\[B = log_2(127) = 6.98\sim 7\]
+	
+Puesto que el cuantizador no puede tener 6.98 bits, lo redondeamos hacia arriba. Por lo tanto, el cuantizador necesitará 7 bits para poder cuantizar 127 valores, y sobrará un valor que no necesita para cuantizar ningún valor.
+	
+	\item $\Delta = 0.02$
+	
+	Ahora vamos a calcularlo para el segundo caso haciendo lo mismo que hemos hecho en el otro caso.
+	
+	\begin{gather*}
+	Delta = \frac{2X_{max}}{2^B} \\
+	2^B = \frac{2X_{max}}{\Delta} = \frac{2*6.35}{0.02} = 635
+	\end{gather*}
+
+	\[B = log_2(635) = 9.31\sim 10\]
+	
+En este caso necesita 10 bits aunque de los 1024 valores disponibles solo utilizará 635.
+\end{enumerate}
+
+\newpage
+
+\end{document}
