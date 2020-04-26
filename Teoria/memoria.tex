@@ -114,7 +114,9 @@ La señal en tiempo discreto
 
 \[x(n)=6.35cos(\pi n/10) \]
 
-es cuantizada con una resolución: (a) $\Delta = 0.1$ o (b) $\Delta = 0.02$. ¿Cuántos bits necesita el convertidor A/D en cada caso?\\
+es cuantizada con una resolución: (a) $\Delta = 0.1$ o (b) $\Delta = 0.02$. ¿Cuántos bits necesita el convertidor A/D en cada caso?\\ \\
+
+
 
 Para calcular los bits necesarios vamos a utilizar la ecuación de la cuantización.
 
@@ -147,5 +149,43 @@ En este caso necesita 10 bits aunque de los 1024 valores disponibles solo utiliz
 \end{enumerate}
 
 \newpage
+
+\section{Ejercicio 19}
+
+Una señal analógica de electrocardiograma (ECG) contiene frecuencias hasta 100 Hz.
+
+\begin{enumerate}[a)]
+	\item Determine la frecuencia de Nyquist para esta señal.
+	\item Suponga que muestreamos esta señal a una frecuencia de 250 muestras/s. Determine el valor de la frecuencia más alta de la señal ECG que se puede representar correctamente a esta frecuencia de muestreo.\\
+\end{enumerate}
+
+
+
+Para calcular este ejercicio vamos a hacer uso del \textbf{Teorema de muestreo}.
+
+\begin{enumerate}[a)]
+	\item Frecuencia de Nyquist.
+
+	Como sabemos, la frecuencia de muestreo debe ser al menos igual al doble de la frecuencia máxima de la señal analógica, que se corresponde con la frecuencia de Nyquist. Es decir:
+	
+	\[f_s \geq 2f_{max}\]
+	
+	donde $2f_{max} = f_{Nyquist}$. Por tanto tenemos que
+	
+	\[2\cdot 100 = f_{Nyquist}\]
+	
+	Es decir, la frecuencia de Nyquist es 200 muestras/s.
+		
+	\item Frecuencia máxima con $f_s = 250$ muestras/s.
+	
+	En este caso sabemos que la frecuencia de muestreo es de 250, por lo que solo necesitamos calcular la frecuencia máxima que podría tener el ECG que fuera correctamente registrada.
+	
+	\begin{gather*}
+	f_s \geq 2f_{max} \Rightarrow 250 \geq 2f_{max}\\
+	f_{max} = \frac{250}{2} = 125
+	\end{gather*}
+	
+	Por tanto sabemos que el ECG podría tener una frecuencia máxima de 125 Hz.
+\end{enumerate}
 
 \end{document}
