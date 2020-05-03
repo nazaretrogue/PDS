@@ -188,4 +188,72 @@ Para calcular este ejercicio vamos a hacer uso del \textbf{Teorema de muestreo}.
 	Por tanto sabemos que el ECG podría tener una frecuencia máxima de 125 Hz.
 \end{enumerate}
 
+\newpage
+
+\section{Ejercicio 20}
+
+Se muestrea una señal analógica $x_a(t) = sin(480\pi t) + 3sin(720\pi t)$ a una frecuencia de 600 muestras por segundo.
+\begin{enumerate}[a)]
+	\item Determine la frecuencia de Nyquist para la señal $x_a(t)$.
+	\item Determine las frecuencias, en radianes, de la señal discreta resultante $x(n)$.
+	\item Si se hace pasar $x(n)$ a través de un convertidor D/A ideal, ¿cuál sería la señal reconstruida $y_a(t)$?\\
+\end{enumerate}
+
+
+
+\begin{enumerate}[a)]
+	\item Para resolver este apartado vamos a utilizar el Teorema de muestreo. Primero necesitamos saber las frecuencias a las que puede llegar la señal. Sabemos que
+	
+	\[\omega = 2\pi f\]
+	
+	Por lo que vamos a calcular $f_1$ y $f_2$:
+
+	\begin{gather*}
+	\omega = 2\pi f_1;\\
+	f_1 = \frac{\omega}{2\pi} = \frac{480\pi}{2\pi} = 240
+	\end{gather*}
+	
+	La primera frecuencia es 240 Hz. Vamos a calcular la segunda y veremos cuál es la máxima.
+	
+	\begin{gather*}
+	\omega = 2\pi f_2;\\
+	f_2 = \frac{\omega}{2\pi} = \frac{720\pi}{2\pi} = 360
+	\end{gather*}
+	
+	La segunda frecuencia es 360 Hz que se corresponde con la máxima. Así que ahora vamos a utilizar el Teorema de muestreo con esta frecuencia que acabamos de calcular. Sabiendo que la frecuencia de Nyquist es el doble de la frecuencia máxima:
+	
+	\[f_{Nyquist} = 2f_{max} = 2\cdot 360 = 720\]
+	
+	Es decir, la frecuencia de Nyquist es 720 Hz, lo que significa que la señal se está muestreando sin cumplir el Teorema de muestreo, ya que la frecuencia de muestreo es $F_s=600$ Hz, menor que el doble de la frecuencia máxima de la señal analógica.
+	
+	\item Puesto que no estamos muestreando correctamente, todas aquellas frecuencias que sean mayores que 600 Hz no las vamos a poder detectar, por lo tanto, la ecuación de la señal muestreada es:
+	
+	\[x(n) = sin\left( \frac{480\pi n}{600}\right) \]
+	
+	Por tanto, la frecuencia máxima de la señal muestreada es $f_{max} = \frac{480\pi}{600} = \frac{4\pi}{5}$.
+	
+	\item Finalmente vamos a reconstuir la señal a partir de la señal muestreada. Debido a que no se ha muestreado correctamente, se pierden frecuencias, en concreto todas aquella que estén por encima de 600 Hz. Si reducimos el rango entre $-F_s/2$ y $F_s/2$, se toman las frecuencias entre -300 y 300, lo que significa que la frecuencia máxima no se va a registrar ya que tiene una frecuencia de 360 Hz.\\
+	
+	La señal real es algo como lo siguiente:
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.3]{original.png}
+	\end{figure}
+	
+	Al muestrear a 600 Hz 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.3]{muestreada.png}
+	\end{figure}
+	
+	Donde la parte roja indica la parte que se mantiene, mientras que el resto queda fuera del alcance de la frecuencia de muestreo. Esto siginifica que estamos perdiendo componentes de la señal. Por tanto la señal reconstruida queda como:
+	
+	\[y_a(t) = sin(480\pi t)\]
+	
+	Es decir, no cumpliendo el Teorema de muestreo perdemos la señal original y no seremos capaces de recuperarla.
+	
+\end{enumerate}
+
 \end{document}

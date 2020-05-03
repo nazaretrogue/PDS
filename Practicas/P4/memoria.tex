@@ -115,143 +115,122 @@ Para sacar el plano Z vamos a usar la función \texttt{zplane()}.
 \section{Transformada Z y función de transferencia}
 \subsection{Filtro IIR y filtro IIR con la función \texttt{filter}}
 
-	El código se puede ver en la sección \color{deepred}\nameref{code1}\color{black} y en \color{deepred}\nameref{code2}\color{black}. Ambos producen la misma salida. La única diferencia con respecto al código de la práctica anterior es que se calculan los polos del resultado.\\
+	El código se puede ver en la sección \color{deepred}\nameref{code1}\color{black} y en \color{deepred}\nameref{code2}\color{black}. Ambos producen la misma salida. La única diferencia con respecto al código de la práctica anterior es que se calculan los polos del filtro, es decir, calculamos \texttt{roots(a)}.\\
 	
-	Al ejecutar el código, la salida es la siguiente:
+	El código está incluido con el nombre de \texttt{iir\_impulso.m}. Al ejecutar el código, la salida es la siguiente:
+	
+	\begin{itemize}
+		\item Primer polo: $(0 + 0.94868i)$
+		\item Segundo polo: $(0 - 0.94868i)$
+	\end{itemize}
 	
 \begin{figure}[H]
-\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.3\linewidth]{img/polos1.png}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=1\linewidth]{img/polosg1.png}
-\end{subfigure}
+  \includegraphics[width=0.5\linewidth]{img/polosg1.png}
 \end{figure}
 	
 	Sabemos que un sistema es estable si se cumple que la región de convergencia (ROC a partir de ahora) de su función de transferencia se corresponde con el exterior de un círculo de radio $r<\infty$.\\
 	
 	También sabemos que un sistema causal es estable si la ROC de la funcion incluye la circunferencia unidad, es decir, los polos caen dentro del círculo de radio $r=1$.\\
 	
-	Teniendo esto en cuenta, podemos ver que el sistema es, en efecto, causal, ya que los polos caen dentro de un círculo con radio $r<\infty$, por ejemplo $r=0.08$.  No obstante, el sistema no es estable, ya que hay varios valores que no están dentro de la circunferencia unidad.
+	Teniendo esto en cuenta, podemos ver que el sistema es, en efecto, causal, ya que los polos caen dentro de un círculo con radio $r<\infty$, por ejemplo $r=0.08$.  También es estable puesto que los polos caen dentro la circunferencia de radio unidad.
 	
 \subsection{Filtro IIR con el escalón unitario}
 
-El código de este apartado se puede ver en \color{deepred}\nameref{code3}\color{black}.\\
+El código está incluido con el nombre de \texttt{iir\_escalon.m} y también se puede ver en \color{deepred}\nameref{code3}\color{black}.\\
 
-Teniendo en cuenta la definición de causalidad y estabilidad el apartado anterior, vamos a comprobrar si este lo es. El resultado de los polos calculados es este:
+Puesto que la ecuación en diferencias es exactamente la misma que en el apartado anterior, el resultado de calcular los polos del denominador es el mismo. Por tanto, al ejecutar el código tenemos que:
 
+	\begin{itemize}
+		\item Primer polo: $(0 + 0.94868i)$
+		\item Segundo polo: $(0 - 0.94868i)$
+	\end{itemize}
+	
 \begin{figure}[H]
-\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.3\linewidth]{img/polos2.png}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=1\linewidth]{img/polosg2.png}
-\end{subfigure}
+  \includegraphics[width=0.5\linewidth]{img/polosg1.png}
 \end{figure}
 
-En este caso:
+Por tanto
 
 \begin{itemize}
-	\item Causalidad: el sistema es causal para $r=0.10$.
-	\item Estabilidad: el sistema no es estable, ya que hay valores que se salen de la circunferencia unidad, como se puede ver en la imagen.
+	\item Causalidad: el sistema es causal para $r=0.8$.
+	\item Estabilidad: el sistema es estable puesto que los polos están dentro de la circunferencia unidad.
 \end{itemize}
 
 \subsection{Filtro IIR con otra ecuación en diferencias}
 
-Podemos encontrar el código en \color{deepred}\nameref{code4}\color{black}.\\
+Podemos encontrar el código en el \texttt{.zip} bajo el nombre de \texttt{iir\_otro.m} y en \color{deepred}\nameref{code4}\color{black}.\\
 
 El resultado obtenido con este código es el siguiente:
 
+\begin{itemize}
+	\item Primer polo: $(2 + 0.0000i)$
+   	\item Segundo polo: $(0.5 + 0.0000i)$
+\end{itemize}
+
 \begin{figure}[H]
-\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.3\linewidth]{img/polos3.png}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=1\linewidth]{img/polosg3.png}
-\end{subfigure}
+  \includegraphics[width=0.7\linewidth]{img/polosg3.png}
 \end{figure}
 
 Observando los polos podemos decir:
 
 \begin{itemize}
-	\item Causalidad: el sistema es causal para $r=1$.
-	\item Estabilidad: el sistema no es estable. Ningún valor está dentro de la circuferencia unidad.
+	\item Causalidad: el sistema es causal para $r=0.4$.
+	\item Estabilidad: el sistema no es estable. Hay un polo que queda fuera de la circunferencia unidad.
 \end{itemize}
 
 \subsection{Filtro FIR con el impulso unitario}
 
-Se puede ver el código en la sección \color{deepred}\nameref{code5}\color{black}.\\
+El código se inlcuye con el nombre de \texttt{fir\_impulso.m}. Además, se puede ver el código en la sección \color{deepred}\nameref{code5}\color{black}.\\
 
 Ejecutando el código obtenemos el siguiente resultado:
 
 \begin{figure}[H]
-\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.3\linewidth]{img/polos4.png}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=1\linewidth]{img/polosg4.png}
-\end{subfigure}
+  \includegraphics[width=0.5\linewidth]{img/polosg4.png}
 \end{figure}
 
-Como podemos observar en la imagen:
+Los filtros FIR nunca tienen polos, solo ceros. Esto se debe a que los filtros FIR siempre son estables. Por tanto:
 
 \begin{itemize}
-	\item Causalidad: el sistema no es causal ya que el polo (0, 0$i$) siempre quedaría dentro de cualquier circunferencia.
-	\item Estabilidad: el sistema es estable puesto que todos los polos quedan dentro de la circunferencia unidad.
+	\item Causalidad: el sistema es causal para cualquier $r$.
+	\item Estabilidad: el sistema es estable.
 \end{itemize}
 
 \subsection{Filtro FIR con el escalón unitario}
 
-Este código está incluido en la sección \color{deepred}\nameref{code6}\color{black}.\\
+Este código se encuentra disponible en el \texttt{.zip} bajo el nombre de \texttt{fir\_escalon.m}. También está incluido en la sección \color{deepred}\nameref{code6}\color{black}.\\
 
 Al ejecutarlo obtenemos la siguiente salida:
 
 \begin{figure}[H]
-\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.3\linewidth]{img/polos5.png}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=1\linewidth]{img/polosg5.png}
-\end{subfigure}
+  \includegraphics[width=0.45\linewidth]{img/polosg4.png}
 \end{figure}
 
 A la vista la imagen, podemos decir que:
 
 \begin{itemize}
-	\item Causalidad: el sistema es causal para $r=1$.
-	\item Estabilidad: el sistema no es estable ya que todos los polos salen de la circunferencia unidad.
+	\item Causalidad: el sistema es causal para cualquier $r$.
+	\item Estabilidad: el sistema es un filtro FIR, por lo que no tiene polos, lo que significa que es estable.
 \end{itemize}
 
 \subsection{Filtro FIR con la función \texttt{conv}}
 
-El código de este apartado está en \color{deepred}\nameref{code7}\color{black}.\\
+El código de este apartado está incluido como \texttt{fir\_conv.m} y en \color{deepred}\nameref{code7}\color{black}.\\
 
 \begin{figure}[H]
-\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.3\linewidth]{img/polos6.png}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=1\linewidth]{img/polosg6.png}
-\end{subfigure}
+  \includegraphics[width=0.5\linewidth]{img/polosg4.png}
 \end{figure}
 
-En este caso podemos decir que:
+Al igual que en los dos filtros anteriores:
 
 \begin{itemize}
-	\item Causalidad: este sistema es causal para $r=0.09$.
-	\item Estabilidad: el sistema es estable ya que todos los polos están dentro de la circunferencia unidad.
+	\item Causalidad: este sistema es causal para cualquier $r$.
+	\item Estabilidad: el sistema es estable ya que es un filtro FIR.
 \end{itemize}
 \newpage
 
@@ -328,8 +307,8 @@ end
 % Pintamos la grafica discreta y continua
 stem(y);
 
-% Calculamos los polos del resultado
-roots(y);
+% Calculamos los polos
+zplane(roots(a))
 \end{lstlisting}
 
 \subsection{Filtro IIR (impulso unitario) con \texttt{filter}}
@@ -348,8 +327,8 @@ filtro = filter(b, a, x)
 % Pintamos la grafica discreta y continua
 stem(filtro);
 
-% Calculamos los polos del resultado
-roots(filtro);
+% Calculamos los polos
+zplane(roots(a))
 \end{lstlisting}
 
 \subsection{Filtro IIR (escalón unitario)}
@@ -369,7 +348,7 @@ filtro = filter(b, a, x)
 stem(filtro);
 
 % Calculamos los polos del resultado
-roots(filtro);
+zplane(roots(a))
 \end{lstlisting}
 
 \subsection{Filtro IIR con otra ecuación en diferencias}
@@ -389,7 +368,7 @@ y = filter(b, a, x)
 stem(y);
 
 % Calculamos los polos
-roots(y);
+zplane(roots(a))
 \end{lstlisting}
 
 \subsection{Filtro FIR (impulso unitario)}
@@ -423,7 +402,7 @@ for n=1:length(x)
 end
 
 stem(y);
-roots(y);
+zplane(roots(a))
 \end{lstlisting}
 
 \subsection{Filtro FIR (escalón unitario)}
@@ -440,7 +419,7 @@ a = 1;
 filtro = filter(b, a, x)
 
 stem(filtro);
-roots(filtro);
+zplane(roots(a))
 \end{lstlisting}
 
 \subsection{Filtro FIR con \texttt{conv}}
@@ -457,7 +436,7 @@ a = 1;
 filtro = conv(b, x)
 
 stem(filtro);
-roots(filtro);
+zplane(roots(a))
 \end{lstlisting}
 
 \subsection{Filtro IIR con \texttt{freqz}}
