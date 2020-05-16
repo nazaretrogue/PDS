@@ -132,14 +132,13 @@ Como podemos ver, es un filtro paso baja puesto que la respuesta en frecuencia e
 	\item \textbf{¿Qué modificaciones introduciría en el diseño del filtro para conseguir una atenuación de -50 dB para el primer lóbulo de la banda de atenuación con la mayor pendiente posible en la banda de transición?}
 \end{itemize}
 
-Para que se produzca una atenuación en los lóbulos de la banda es necesario que disminuya el número de coeficientes del filtro, de forma que la caída se hace menos abrupta pero más profunda es decir, la pendiente es menor pero la atenuación es mayor. Si queremos que llegue a una atenuación de -50 dB utilizamos 15 coeficientes para el filtro.\\
+Para que se produzca una atenuación de -50 dB debemos cambiar la forma de truncar. Para ello, podemos cambiar el tipo de ventana a alguna que sepamos que lleva la atenuación a 50 dB, como es por ejemplo la ventana hamming.\\
 
 Para ello solo debemos cambiar una línea en el código:
 
 \begin{lstlisting}[frame=single]
-% Se definen los parametros
-% Numero de coeficientes del filtro
-M=15
+% Cambiamos la ventana de truncado
+window = hamming(M)
 \end{lstlisting}
 
 La respuesta en frecuencia con \texttt{M=15} es la siguiente:
@@ -149,7 +148,7 @@ La respuesta en frecuencia con \texttt{M=15} es la siguiente:
 	\includegraphics[scale=0.5]{img/2.png}
 \end{figure}
 
-Como podemos ver, la pendiente del primer lóbulo es menor que con más coeficientes, pero sin embargo ha superado los -50 dB de atenuación que ibamos buscando.
+Como podemos ver, la atenuación es de 50 dB. Esto se debe a la forma de la ventana hamming, que es uno de los tipos de ventana más usado porque ofrece buenos resultados, como se puede observar en la imagen, donde hemos conseguido una atenuación mucho mayor que con la ventana rectangular.
 
 \newpage
 
@@ -165,9 +164,9 @@ Vamos a comenzar con la comparativa de las distintas \texttt{M}. En la última c
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 M  & Anchura & Atenuación & Respuesta en frecuencia & Sección con el código \\ \hline
-15 & \textasciitilde{} Hz            & \textasciitilde{}42 dB                       & \includegraphics[scale=0.3]{img/3.png} &  \color{deepred}\nameref{code2}\color{black} \\ \hline
-31 & \textasciitilde{} Hz            & \textasciitilde{}60 dB                       & \includegraphics[scale=0.3]{img/4.png} & \color{deepred}\nameref{code3}\color{black} \\ \hline
-63 & \textasciitilde{} Hz            & \textasciitilde{}40 dB                       & \includegraphics[scale=0.3]{img/5.png} & \color{deepred}\nameref{code4}\color{black} \\ \hline
+15 & \textasciitilde{}100 Hz            & \textasciitilde{}20 dB                       & \includegraphics[scale=0.3]{img/3.png} &  \color{deepred}\nameref{code2}\color{black} \\ \hline
+31 & \textasciitilde{}500 Hz            & \textasciitilde{}20 dB                       & \includegraphics[scale=0.3]{img/4.png} & \color{deepred}\nameref{code3}\color{black} \\ \hline
+63 & \textasciitilde{}1000 Hz            & \textasciitilde{}20 dB                       & \includegraphics[scale=0.3]{img/5.png} & \color{deepred}\nameref{code4}\color{black} \\ \hline
 \end{tabular}
 \caption{Tabla comparativa de M}
 \end{table}
@@ -182,14 +181,14 @@ Ahora vamos a llevar a cabo la comparativa entre los distintos tipos de ventanas
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 Ventana  & Anchura & Atenuación & Respuesta en frecuencia & Sección con el código \\ \hline
-Rectangular & \textasciitilde{} Hz            & \textasciitilde{}60 dB                       & \includegraphics[scale=0.25]{img/6.png} &  \color{deepred}\nameref{code5}\color{black} \\ \hline
-Bartlett & \textasciitilde{} Hz            & \textasciitilde{}25 dB                       & \includegraphics[scale=0.25]{img/7.png} & \color{deepred}\nameref{code6}\color{black} \\ \hline
-Hamming & \textasciitilde{} Hz            & \textasciitilde{}100 dB                       & \includegraphics[scale=0.25]{img/8.png} & \color{deepred}\nameref{code7}\color{black} \\ \hline
+Rectangular & \textasciitilde{}600 Hz            & \textasciitilde{}20 dB                       & \includegraphics[scale=0.25]{img/6.png} &  \color{deepred}\nameref{code5}\color{black} \\ \hline
+Bartlett & \textasciitilde{}700 Hz            & \textasciitilde{}25 dB                       & \includegraphics[scale=0.25]{img/7.png} & \color{deepred}\nameref{code6}\color{black} \\ \hline
+Hamming & \textasciitilde{}10 Hz            & \textasciitilde{}50 dB                       & \includegraphics[scale=0.25]{img/8.png} & \color{deepred}\nameref{code7}\color{black} \\ \hline
 \end{tabular}
 \caption{Tabla comparativa de ventanas}
 \end{table}
 
-La diferencia entre los tres tipos de ventanas es evidente. Como podemos ver, la ventana Hamming es la que tiene una mayor atenuación, llegando hasta -100 dB en el primer lóbulo. Por el contrario, la ventana Bartlett solo alcanza los 25 dB; además, con esta última ventana, no se ven lóbulos propiamente dichos, se ven pequeñas ondas a lo largo de la gráfica con la respuesta en frecuencia.
+La diferencia entre los tres tipos de ventanas es evidente. Como podemos ver, la ventana Hamming es la que tiene una menor atenuación, llegando a 10 dB en el primer lóbulo. Por el contrario, la ventana Bartlett solo alcanza los 700 dB; además, con esta última ventana, no se ven lóbulos propiamente dichos, se ven pequeñas ondas a lo largo de la gráfica con la respuesta en frecuencia.
 
 \newpage
 
